@@ -2,12 +2,16 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    //Walk
     [SerializeField] float Speed;
     float move;
 
+    Vector2 moveInput; //for walk with addforce
+
+    //Jump
     [SerializeField] float JumpForce;
     [SerializeField] bool IsJumping;
-
+    //RB2D
     Rigidbody2D rb2d;
     
     
@@ -20,10 +24,15 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Move
+
+        //walk with addforce
+        moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        rb2d.AddForce(moveInput * Speed);
+
+       /* //Move
         move = Input.GetAxis("Horizontal");
 
-        rb2d.linearVelocity = new Vector2(move * Speed, rb2d.linearVelocity.y);
+        rb2d.linearVelocity = new Vector2(move * Speed, rb2d.linearVelocity.y);*/
 
         //Jump
         if (Input.GetButtonDown("Jump") && !IsJumping)
