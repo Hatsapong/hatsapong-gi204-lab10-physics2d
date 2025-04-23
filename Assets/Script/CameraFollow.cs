@@ -2,32 +2,11 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
+    private Vector3 offset = new Vector3 (0f, 0f, -10f);
+    private float smoothTime = 0.25f;
+    private Vector3 velocity = Vector3.zero;
+
     [SerializeField] private Transform target;
-    [SerializeField] private float smoothSpeed = 0.125f;
-    public Vector3 offset;
-    [Header("Camera bounds")]
-    public Vector3 minCamerabounds;
-    public Vector3 maxCamerabounds;
-
-    private void FixedUpdate()
-    {
-        Vector3 desiredPosition = target.localPosition + offset;
-        var localPosition = transform.localPosition;
-        Vector3 smoothPosition = Vector3.Lerp(localPosition, desiredPosition, smoothSpeed);
-        localPosition = smoothPosition;
-
-        localPosition = new Vector3(
-            Mathf.Clamp(localPosition.x, minCamerabounds.x, maxCamerabounds.x),
-            Mathf.Clamp(localPosition.y, minCamerabounds.y, maxCamerabounds.x),
-            Mathf.Clamp(localPosition.z, minCamerabounds.z, maxCamerabounds.z)
-            );
-        transform.localPosition = localPosition;
-    }
-
-    public void SetTarget(Transform targetToSet)
-    {
-        target = targetToSet;
-    }
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -37,8 +16,9 @@ public class CameraFollow : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        Vector3 targetPostion = target.position + offset;
+        transform.position = Vector3.SmoothDamp(transform.position, targetPostion, ref velocity, smoothTime);
     }
 }
